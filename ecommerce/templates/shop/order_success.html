@@ -1,0 +1,16 @@
+{% extends 'shop/base.html' %}
+{% block title %}Order Success{% endblock title %}
+
+{% block main-content %}
+<section class="order-success spad">
+  <div class="container">
+    <div class="success-message" style="text-align: center; padding: 50px 20px;">
+      <h1>Thank You for Your Order!</h1>
+      <p>Hi {{ request.user.username }},</p>
+      <p>Your order has been successfully placed. An invoice has been sent to your email address <strong>{{ email }}</strong>.</p>
+      <p>If you have any questions, feel free to <a href="{% url 'contact' %}">contact us</a>.</p>
+      <a href="{% url 'home' %}" class="site-btn" style="margin-top: 20px; display: inline-block;">Continue Shopping</a>
+    </div>
+  </div>
+</section>
+{% endblock main-content %}

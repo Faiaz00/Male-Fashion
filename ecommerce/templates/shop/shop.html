@@ -1,0 +1,177 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}Shop{% endblock title %}
+
+{% block main-content %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option py-4 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Shop</h4>
+            <nav>
+                <a href="{% url 'home' %}">Home</a> / <span>Shop</span>
+            </nav>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Shop Section Begin -->
+<section class="shop spad py-5">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <aside class="col-lg-3 mb-4">
+                <div class="shop__sidebar p-3 border rounded shadow-sm bg-white">
+
+                    <!-- Search -->
+                    <div class="shop__sidebar__search mb-4">
+                        <form action="#" method="GET">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        <span class="icon_search"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Categories Accordion -->
+                    <div class="accordion" id="shopSidebar">
+                        <div class="card border-0">
+                            <div class="card-header bg-white p-0" id="headingOne">
+                                <h6 class="mb-0">
+                                    <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Categories
+                                    </button>
+                                </h6>
+                            </div>
+
+                            <div id="collapseOne" class="collapse show" data-bs-parent="#shopSidebar" aria-labelledby="headingOne">
+                                <div class="text-black card-body px-0">
+                                    <ul class="list-unstyled">
+
+                                        <!-- Clothings Dropdown -->
+                                        <li>
+                                            <button
+                                                class="btn btn-sm btn-toggle align-items-center rounded collapsed w-100 text-start px-0 text-dark"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#clothingsSubmenu"
+                                                aria-expanded="false"
+                                                aria-controls="clothingsSubmenu">
+                                                Clothings
+                                            </button>
+                                            <div class="collapse ps-3 mt-2" id="clothingsSubmenu">
+                                                <ul class="list-unstyled">
+                                                    <li><a href="{% url 'tshirt' %}">T-shirt</a></li>
+                                                    <li><a href="{% url 'pant' %}">Pant</a></li>
+                                                    <li><a href="{% url 'jacket' %}">Jacket</a></li>
+                                                    <li><a href="{% url 'hoodie' %}">Hoodie</a></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+
+                                        <!-- Shoes Dropdown -->
+                                        <li class="mt-2">
+                                            <button
+                                                class="btn btn-sm btn-toggle align-items-center rounded collapsed w-100 text-start px-0 text-dark"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#shoesSubmenu"
+                                                aria-expanded="false"
+                                                aria-controls="shoesSubmenu">
+                                                Shoes
+                                            </button>
+                                            <div class="collapse ps-3 mt-2" id="shoesSubmenu">
+                                                <ul class="list-unstyled">
+                                                    <li><a href="{% url 'sandals' %}">Sandals</a></li>
+                                                    <li><a href="{% url 'boots' %}">Boots</a></li>
+                                                    <li><a href="{% url 'loafers' %}">Loafers</a></li>
+                                                    <li><a href="{% url 'sneakers' %}">Sneakers</a></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+
+                                        <!-- Accessories Dropdown -->
+                                        <li class="mt-2">
+                                            <button
+                                                class="btn btn-sm btn-toggle align-items-center rounded collapsed w-100 text-start px-0 text-dark"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#accessoriesSubmenu"
+                                                aria-expanded="false"
+                                                aria-controls="accessoriesSubmenu">
+                                                Accessories
+                                            </button>
+                                            <div class="collapse ps-3 mt-2" id="accessoriesSubmenu">
+                                                <ul class="list-unstyled">
+                                                    <li><a href="{% url 'watches' %}">Watches</a></li>
+                                                    <li><a href="{% url 'bags' %}">Bags</a></li>
+                                                    <li><a href="{% url 'belts' %}">Belts</a></li>
+                                                    <li><a href="{% url 'sunglasses' %}">Sunglasses</a></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                <div class="row g-4">
+                    <!-- Example Product -->
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card product__item border-0 shadow-sm h-100">
+                            <div class="product__item__pic set-bg position-relative" data-setbg="img/product/product-2.jpg" style="height: 250px; background-size: cover; background-position: center;">
+                                <ul class="product__hover position-absolute top-0 end-0 m-2 list-unstyled d-flex gap-2">
+                                    <li><a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a></li>
+                                    <li><a href="#"><img src="{% static 'img/icon/compare.png' %}" alt=""> <span>Compare</span></a></li>
+                                    <li><a href="#"><img src="{% static 'img/icon/search.png' %}" alt=""></a></li>
+                                </ul>
+                            </div>
+                            <div class="card-body text-center">
+                                <h6 class="card-title">Piqué Biker Jacket</h6>
+                                <a href="#" class="btn btn-outline-dark btn-sm my-2">+ Add To Cart</a>
+                                <div class="rating text-warning mb-2">
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <i class="fa fa-star-o"></i>
+                                </div>
+                                <h5 class="text-dark">$67.24</h5>
+                                <div class="product__color__select d-flex justify-content-center mt-2">
+                                    <label for="pc-4" class="mx-1"><input type="radio" id="pc-4"></label>
+                                    <label for="pc-5" class="mx-1 active black"><input type="radio" id="pc-5"></label>
+                                    <label for="pc-6" class="mx-1 grey"><input type="radio" id="pc-6"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more product cards here -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <nav class="product__pagination d-inline-block">
+                            <a class="active" href="#">1</a>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <span>...</span>
+                            <a href="#">21</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shop Section End -->
+{% endblock main-content %}

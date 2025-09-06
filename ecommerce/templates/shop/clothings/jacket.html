@@ -1,0 +1,138 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Jackets{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock extra_css %}
+
+{% block main-content %}
+<div class="container py-5">
+  <div class="row g-4">
+
+    {# Sidebar #}
+    <aside class="col-lg-3">
+      <div class="card soft-card shadow-sm sticky-top" style="top: 98px;">
+        <div class="card-body">
+          <form method="get" class="mb-3">
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                name="q"
+                placeholder="Search products"
+                value="{{ request.GET.q|default_if_none:'' }}"
+                aria-label="Search products"
+              >
+              {% if request.GET.price %}<input type="hidden" name="price" value="{{ request.GET.price }}">{% endif %}
+              {% if request.GET.brand %}<input type="hidden" name="brand" value="{{ request.GET.brand }}">{% endif %}
+              <button class="btn btn-dark" type="submit">Search</button>
+            </div>
+          </form>
+
+          <div class="dropdown w-100 mb-2">
+            <button class="btn btn-outline-dark w-100 dropdown-toggle" type="button" id="brandMenu" data-bs-toggle="dropdown" aria-expanded="false">
+              Filter by Brand
+            </button>
+            <ul class="dropdown-menu w-100" aria-labelledby="brandMenu">
+              <li><a class="dropdown-item" href="{% querystring brand='North Face' %}">North Face</a></li>
+              <li><a class="dropdown-item" href="{% querystring brand='Columbia' %}">Columbia</a></li>
+              <li><a class="dropdown-item" href="{% querystring brand='H & M' %}">H &amp; M</a></li>
+            </ul>
+          </div>
+
+          <div class="dropdown w-100 mb-3">
+            <button class="btn btn-outline-dark w-100 dropdown-toggle" type="button" id="priceMenu" data-bs-toggle="dropdown" aria-expanded="false">
+              Filter by Price
+            </button>
+            <ul class="dropdown-menu w-100" aria-labelledby="priceMenu">
+              <li><a class="dropdown-item" href="{% querystring price='below5000' %}">৳0–৳5,000</a></li>
+              <li><a class="dropdown-item" href="{% querystring price='below20000' %}">৳5,000–৳20,000</a></li>
+              <li><a class="dropdown-item" href="{% querystring price='below45000' %}">৳20,000–৳45,000</a></li>
+              <li><a class="dropdown-item" href="{% querystring price='below70000' %}">৳45,000–৳70,000</a></li>
+              <li><a class="dropdown-item" href="{% querystring price='above70000' %}">৳70,000+</a></li>
+            </ul>
+          </div>
+
+          {% if request.GET.brand or request.GET.price or request.GET.q %}
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            {% if request.GET.brand %}<a class="btn btn-sm btn-outline-secondary" href="{% querystring brand=None %}">Brand: {{ request.GET.brand }} ×</a>{% endif %}
+            {% if request.GET.price %}<a class="btn btn-sm btn-outline-secondary" href="{% querystring price=None %}">Price: {{ request.GET.price }} ×</a>{% endif %}
+            {% if request.GET.q %}<a class="btn btn-sm btn-outline-secondary" href="{% querystring q=None %}">Search: “{{ request.GET.q }}” ×</a>{% endif %}
+          </div>
+          {% endif %}
+
+          <a href="{% url 'jacket' %}" class="btn btn-outline-secondary w-100">Clear All Filters</a>
+        </div>
+      </div>
+    </aside>
+
+    {# Results #}
+    <section class="col-lg-9">
+      <div class="row g-4">
+        {% for product in jackets %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card product product-card h-100 border-0 shadow-sm">
+            <div class="p-3">
+              <div class="img-zoom rounded-3">
+                <img
+                  src="{{ product.product_image.url }}"
+                  alt="{{ product.title|default:'Jacket' }}"
+                  class="img-hover-scale"
+                />
+              </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h6 class="mb-1 text-dark fw-semibold">{{ product.title }}</h6>
+              <div class="text-muted small mb-2">{{ product.brand }}</div>
+              <p class="small line-clamp-2 mb-3">{{ product.description }}</p>
+              <div class="mt-auto d-flex align-items-center">
+                <span class="price text-success fw-bold">Tk. {{ product.discounted_price|floatformat:0 }}</span>
+                <span class="old-price text-muted small text-decoration-line-through ms-1">
+                  <del>{{ product.selling_price|floatformat:0 }}</del>
+                </span>
+              </div>
+              <a href="{% url 'product-detail' product.id %}" class="stretched-link" aria-label="View {{ product.title }}"></a>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+          <div class="alert alert-light border" role="alert">No jackets found.</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {# Pagination #}
+      <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Pagination">
+          <ul class="pagination modern">
+            {% if jackets.has_previous %}
+              <li class="page-item"><a class="page-link" href="{% querystring page=jackets.previous_page_number %}" rel="prev">Previous</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {% for num in jackets.paginator.page_range %}
+              {% if jackets.number == num %}
+                <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+              {% elif num > jackets.number|add:'-3' and num < jackets.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="{% querystring page=num %}">{{ num }}</a></li>
+              {% endif %}
+            {% endfor %}
+
+            {% if jackets.has_next %}
+              <li class="page-item"><a class="page-link" href="{% querystring page=jackets.next_page_number %}" rel="next">Next</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+  </div>
+</div>
+{% endblock main-content %}

@@ -1,0 +1,53 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock title %}
+{% block main-content %}
+  <div class="email-wrapper">
+    <div class="email-content">
+      <div class="email-header">
+        <h1>Thank You for Your Order</h1>
+      </div>
+      <div class="email-body">
+        <h2>Hello {{ name }},</h2>
+        <p>We’ve received your order and are currently processing it. Below is a summary of your purchase:</p>
+
+        <div class="order-summary">
+          <div class="order-item">
+            <span>Vanilla Salted Caramel</span>
+            <span>$300.00</span>
+          </div>
+          <div class="order-item">
+            <span>German Chocolate</span>
+            <span>$170.00</span>
+          </div>
+          <div class="order-item">
+            <span>Sweet Autumn</span>
+            <span>$170.00</span>
+          </div>
+          <div class="order-item">
+            <span>Gluten Free Mini Dozen</span>
+            <span>$110.00</span>
+          </div>
+          <div class="order-total">
+            <span>Total</span>
+            <span>{{ total }}</span>
+          </div>
+        </div>
+
+        <p><strong>Shipping Address:</strong><br>
+          {{ address }}<br>
+          {{ city }}
+        </p>
+
+        <p>If you have any questions or need support, feel free to contact us anytime.</p>
+
+        <p>Thank you for shopping with us!<br>
+        – The Shop Team</p>
+      </div>
+      <div class="footer">
+        &copy; {{ year }} Your Shop Name. All rights reserved.
+      </div>
+    </div>
+  </div>
+
+{% endblock main-content %}

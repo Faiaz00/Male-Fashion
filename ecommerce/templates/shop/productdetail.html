@@ -1,0 +1,56 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}{{ product.title }}{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-sm-6 text-center align-self-center">
+            {% if product.product_image %}
+                <img src="{{ product.product_image.url }}" alt="{{ product.title }}" class="img-fluid img-thumbnail">
+            {% else %}
+                <img src="{% static 'images/no_image.png' %}" alt="No image available" class="img-fluid img-thumbnail">
+            {% endif %}
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-sm-5 offset-sm-1">
+            <h2>{{ product.title }}</h2>
+            <hr>
+            <p>{{ product.description }}</p>
+
+            <!-- Pricing -->
+            <h4>
+                Tk. {{ product.discounted_price }}
+                {% if product.discounted_price < product.selling_price %}
+                    <small class="fw-light text-decoration-line-through">
+                        {{ product.selling_price }}
+                    </small>
+                {% endif %}
+            </h4>
+
+            <!-- Cart Buttons -->
+            {% if item_already_in_cart %}
+                <a href="{% url 'showcart' %}" class="btn btn-warning shadow px-5 py-2 ms-2">Go to Cart</a>
+            {% else %}
+                <form action="{% url 'add_to_cart' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="prod_id" value="{{ product.id }}">
+                    <button type="submit" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
+                </form>
+            {% endif %}
+
+            <!-- Buy Now -->
+            <a href="{% url 'buy-now'%}" class="btn btn-danger shadow px-5 py-2 ms-2">Buy Now</a>
+
+            <!-- Offers -->
+            <h5 class="mt-5">Available Offers</h5>
+            <ul>
+                <li>Bkash Offer: 5% Unlimited Cashback on Payment</li>
+                <li>Special Price: Get extra Tk. 5000 off (price inclusive of discount)</li>
+                <li>Partner Offer: Tk. 1000 Gift Card on Every 1000th Transaction with Bkash or Nagad</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock main-content %}
