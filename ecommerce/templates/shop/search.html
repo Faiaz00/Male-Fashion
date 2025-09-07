@@ -1,0 +1,64 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+
+{% block title %}Search Results | Male-Fashion{% endblock %}
+
+{% block main-content %}
+<div class="container py-5">
+
+    <!-- Search Form -->
+    <form method="get" action="{% url 'search' %}" class="mb-5">
+        <div class="input-group">
+            <input type="text" name="query" class="form-control"
+                   placeholder="Search for products..."
+                   value="{{ request.GET.query }}">
+            <button class="btn btn-dark" type="submit">
+                <i class="fa fa-search"></i> Search
+            </button>
+        </div>
+    </form>
+
+    <!-- Results -->
+    <h4 class="mb-4">Search Results</h4>
+
+    {% if product %}
+        <div class="row">
+            {% for p in product %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="product__item">
+                        <!-- Product Image -->
+                        <div class="product__item__pic set-bg"
+                             {% if p.image %}
+                                 style="background-image: url('{{ p.image.url }}');"
+                             {% else %}
+                                 style="background-image: url('{% static "img/placeholder.png" %}');"
+                             {% endif %}>
+                            <ul class="product__hover">
+                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li><a href="{% url 'shopdetails' %}?id={{ p.id }}"><i class="fa fa-eye"></i></a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="product__item__text">
+                            <h6>
+                                <a href="{% url 'shopdetails' %}?id={{ p.id }}">{{ p.title }}</a>
+                            </h6>
+                            <h5>${{ p.price }}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- No Results -->
+        <div class="text-center py-5">
+            <img src="{% static 'img/no-results.png' %}" alt="No results"
+                 class="mb-4" style="max-width:200px;">
+            <h5>No products found</h5>
+            <p class="text-muted">Try searching with a different keyword.</p>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

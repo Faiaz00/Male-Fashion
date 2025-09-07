@@ -696,3 +696,11 @@ def payment_done(request):
     c.delete()
   return redirect('orders')
 
+def search(request):
+    query = request.GET.get('query')
+    product = Product.objects.none()  # default: empty queryset
+    
+    if query:
+        product = Product.objects.filter(title__icontains=query)
+    
+    return render(request, 'shop/search.html', {'product': product})
