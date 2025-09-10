@@ -36,10 +36,15 @@ urlpatterns = [
     path('acccategory/', views.accessories_category_view, name = 'accessoriescategory'),
 
 
-    path('clothings/tshirt/', views.tshirt_view, name='tshirt'),
-    path('clothings/pant/', views.pant_view, name='pant'),
-    path('clothings/jacket/', views.jacket_view, name='jacket'),
-    path('clothings/hoodie/', views.hoodie_view, name='hoodie'),
+    path('clothings/', views.clothing, name='clothing'),
+    path('accessories', views.accessories, name='accessories'),
+    path('shoes', views.shoes, name='shoes'),
+
+
+    path('clothings/tshirt/', views.tshirt_view, name='tshirts'),
+    path('clothings/pant/', views.pant_view, name='pants'),
+    path('clothings/jacket/', views.jacket_view, name='jackets'),
+    path('clothings/hoodie/', views.hoodie_view, name='hoodies'),
 
 
     path('accessories/watches/', views.watches_view, name='watches'),

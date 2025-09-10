@@ -1,0 +1,107 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Shoes{% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock extra_css %}
+
+{% block main-content %}
+<div class="container py-5">
+  <div class="row g-4">
+
+    {# Sidebar #}
+    <aside class="col-lg-3">
+      <div class="card soft-card shadow-sm sticky-top" style="top: 98px;">
+        <div class="card-body">
+
+          <div class="category-list mb-4">
+            <h5 class="fw-bold mb-3">Shoe Categories</h5>
+            <ul class="list-unstyled">
+              <li><a href="{% url 'boots' %}" class="btn btn-outline-dark w-100 mb-2">Boots</a></li>
+              <li><a href="{% url 'loafers' %}" class="btn btn-outline-dark w-100 mb-2">Loafers</a></li>
+              <li><a href="{% url 'sandals' %}" class="btn btn-outline-dark w-100 mb-2">Sandals</a></li>
+              <li><a href="{% url 'sneakers' %}" class="btn btn-outline-dark w-100 mb-2">Sneakers</a></li>
+            </ul>
+          </div>
+
+          {% if request.GET.brand or request.GET.price or request.GET.q %}
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            {% if request.GET.brand %}<a class="btn btn-sm btn-outline-secondary" href="{% querystring brand=None %}">Brand: {{ request.GET.brand }} ×</a>{% endif %}
+            {% if request.GET.price %}<a class="btn btn-sm btn-outline-secondary" href="{% querystring price=None %}">Price: {{ request.GET.price }} ×</a>{% endif %}
+            {% if request.GET.q %}<a class="btn btn-sm btn-outline-secondary" href="{% querystring q=None %}">Search: “{{ request.GET.q }}” ×</a>{% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </aside>
+
+    {# Results #}
+    <section class="col-lg-9">
+      <div class="row g-4">
+        {% for product in shoes %}
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="card product product-card h-100 border-0 shadow-sm">
+            <div class="p-3">
+              <div class="img-zoom rounded-3">
+                <img
+                  src="{{ product.product_image.url }}"
+                  alt="{{ product.title|default:'Shoe' }}"
+                  class="img-hover-scale"
+                />
+              </div>
+            </div>
+            <div class="card-body d-flex flex-column">
+              <h6 class="mb-1 text-dark fw-semibold">{{ product.title }}</h6>
+              <div class="text-muted small mb-2">{{ product.brand }}</div>
+              <p class="small line-clamp-2 mb-3">{{ product.description }}</p>
+              <div class="mt-auto d-flex align-items-center">
+                <span class="price text-success fw-bold">Tk. {{ product.discounted_price|floatformat:0 }}</span>
+                <span class="old-price text-muted small text-decoration-line-through ms-1">
+                  <del>{{ product.selling_price|floatformat:0 }}</del>
+                </span>
+              </div>
+              <a href="{% url 'product-detail' product.id %}" class="stretched-link" aria-label="View {{ product.title }}"></a>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+          <div class="alert alert-light border" role="alert">No shoes found.</div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {# Pagination #}
+      <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Pagination">
+          <ul class="pagination modern">
+            {% if shoes.has_previous %}
+              <li class="page-item"><a class="page-link" href="{% querystring page=shoes.previous_page_number %}" rel="prev">Previous</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Previous</span></li>
+            {% endif %}
+
+            {% for num in shoes.paginator.page_range %}
+              {% if shoes.number == num %}
+                <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+              {% elif num > shoes.number|add:'-3' and num < shoes.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="{% querystring page=num %}">{{ num }}</a></li>
+              {% endif %}
+            {% endfor %}
+
+            {% if shoes.has_next %}
+              <li class="page-item"><a class="page-link" href="{% querystring page=shoes.next_page_number %}" rel="next">Next</a></li>
+            {% else %}
+              <li class="page-item disabled"><span class="page-link">Next</span></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+  </div>
+</div>
+{% endblock main-content %}

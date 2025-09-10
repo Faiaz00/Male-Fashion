@@ -80,3 +80,134 @@
 @media (min-width: 992px) {
   .sticky-top { z-index: 0; }
 }
+
+/* Adjusting image height */
+.carousel-item img { 
+    height: 70vh; /* 70% of viewport height */
+    object-fit: cover;
+}
+
+/* Modernizing the carousel control buttons */
+.carousel-control-prev, .carousel-control-next {
+  background-color: rgba(0, 0, 0, 0.4); /* Slight transparency */
+  border: none;
+  border-radius: 50%;  /* Circular buttons */
+  width: 50px;  /* Button size */
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for a modern look */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+}
+
+/* Adjusting image height */
+.carousel-item img { 
+    height: 70vh; /* 70% of viewport height */
+    object-fit: cover;
+}
+
+/* Modernizing and positioning the carousel control buttons */
+.carousel-control-prev, .carousel-control-next {
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  top: 50%; /* Vertically centered */
+  transform: translateY(-50%); /* Adjust for exact vertical center */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for a modern look */
+  transition: background-color 0.0s ease, box-shadow 0.0s ease; /* Faster transitions */
+  z-index: 1;
+}
+
+.carousel-control-prev {
+  left: 10px; /* Positioned to the left side */
+}
+
+.carousel-control-next {
+  right: 10px; /* Positioned to the right side */
+}
+
+/* Arrow styling */
+.carousel-control-prev-icon, .carousel-control-next-icon {
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 5px;
+  transform: rotate(45deg); /* Creates the arrow shape */
+}
+
+.carousel-control-prev-icon {
+  transform: rotate(-135deg); /* Left arrow */
+}
+
+.carousel-control-next-icon {
+  transform: rotate(45deg); /* Right arrow */
+}
+
+/* Hover effect for carousel control buttons */
+.carousel-control-prev:hover, .carousel-control-next:hover {
+  background-color: rgba(0, 0, 0, 0.4); /* Darker on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Enhanced shadow on hover */
+}
+
+/* Smooth transitions for slide movement */
+.carousel-item {
+  transition: transform 0.5s ease-in-out; /* Faster transition (0.5s) */
+}
+
+/* Styling for the carousel caption */
+.carousel-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.7); /* Darker transparent background */
+  color: white;
+  padding: 15px 25px; /* Increased padding for better readability */
+  border-radius: 10px;
+  font-size: 1.5rem; /* Larger text size */
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Soft shadow for text */
+  width: 90%;  /* Flexible width */
+  z-index: 10;
+}
+
+/* Optional: Style for the title */
+.carousel-caption h5 {
+  font-size: 2rem;  /* Larger size for the main heading */
+  color: ivory;
+}
+
+/* Optional: Styling for the description text */
+.carousel-caption p {
+  font-size: 1.2rem; /* Adjusted size for the description */
+  margin-bottom: 10px;
+  color: rgb(216, 213, 57); /* Space between text */
+}
+
+/* Optional: Styling for 'Click Here to See More' link */
+.carousel-caption a {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e50914;  /* Red button for contrast */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.carousel-caption a:hover {
+  background-color: #b20710;  /* Darker red on hover */
+}

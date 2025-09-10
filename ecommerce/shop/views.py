@@ -204,13 +204,28 @@ def blogdetails(request):
 def contact(request):
     return render(request, 'shop/contact.html')
 
-def shop(request):
-    return render(request, 'shop/shop.html')
-
 def home(request):
     return render(request, 'shop/index.html')
 
+def shop(request):
+    # Fetch all products from the database
+    products = Product.objects.all()  # This gets all products
+    return render(request, 'shop/shop.html', {'products': products})
 
+# View for clothing products
+def clothing(request):
+    clothing_products = Product.objects.filter(category='Clothing')  # Filter by Clothing category
+    return render(request, 'shop/clothings/clothing.html', {'clothing_products': clothing_products})
+
+# View for accessories products
+def accessories(request):
+    accessories_products = Product.objects.filter(category='Accessories')  # Filter by Accessories category
+    return render(request, 'shop/accessories/accessories.html', {'accessories_products': accessories_products})
+
+# View for shoes products
+def shoes(request):
+    shoes_products = Product.objects.filter(category='Shoes')  # Filter by Shoes category
+    return render(request, 'shop/shoes/shoes.html', {'shoes_products': shoes_products})
 
 def clothings_category_view(request, category):
     if category not in VALID_CLOTHING_CATEGORIES:
@@ -698,9 +713,9 @@ def payment_done(request):
 
 def search(request):
     query = request.GET.get('query')
-    product = Product.objects.none()  # default: empty queryset
+    products = Product.objects.none()  # default: empty queryset
     
     if query:
-        product = Product.objects.filter(title__icontains=query)
+        products = Product.objects.filter(title__icontains=query)
     
-    return render(request, 'shop/search.html', {'product': product})
+    return render(request, 'shop/search.html', {'products': products})
