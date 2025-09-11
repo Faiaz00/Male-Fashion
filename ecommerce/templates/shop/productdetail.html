@@ -1,49 +1,104 @@
 {% extends 'shop/base.html' %}
 {% load static %}
+
 {% block title %}{{ product.title }}{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock extra_css %}
+
 {% block main-content %}
 <div class="container my-5">
     <div class="row">
-        <!-- Product Image -->
+        <!-- Product Image Section -->
         <div class="col-sm-6 text-center align-self-center">
-            {% if product.product_image %}
-                <img src="{{ product.product_image.url }}" alt="{{ product.title }}" class="img-fluid img-thumbnail">
-            {% else %}
-                <img src="{% static 'images/no_image.png' %}" alt="No image available" class="img-fluid img-thumbnail">
-            {% endif %}
+            <!-- Image Carousel -->
+            <div id="productImageCarousel" class="carousel slide mb-3" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- Default Product Image -->
+                    <div class="carousel-item active">
+                        {% if product.product_image %}
+                            <img src="{{ product.product_image.url }}" alt="{{ product.title }}" class="d-block w-100 img-fluid" id="mainImage">
+                        {% else %}
+                            <img src="{% static 'images/no_image.png' %}" alt="No image available" class="d-block w-100 img-fluid" id="mainImage">
+                        {% endif %}
+                    </div>
+
+                    <!-- Additional Color-Based Product Images -->
+                    {% for image in product_images %}
+                        <div class="carousel-item">
+                            <img src="{{ image.image.url }}" alt="{{ image.color }} image" class="d-block w-100 img-fluid">
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#productImageCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productImageCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            <!-- Thumbnails below the carousel -->
+            <div class="d-flex justify-content-center">
+                {% for image in product_images %}
+                    <img src="{{ image.image.url }}" class="img-thumbnail mini-thumbnail" alt="{{ image.color }} image" data-bs-target="#productImageCarousel" data-bs-slide-to="{{ forloop.counter0 }}">
+                {% endfor %}
+            </div>
         </div>
 
-        <!-- Product Details -->
-        <div class="col-sm-5 offset-sm-1">
+        <!-- Product Details Section -->
+        <div class="col-sm-6">
             <h2>{{ product.title }}</h2>
+            <p class="text-muted">{{ product.brand }}</p>
             <hr>
             <p>{{ product.description }}</p>
 
-            <!-- Pricing -->
-            <h4>
+            <!-- Product Price -->
+            <h4 class="price">
                 Tk. {{ product.discounted_price }}
                 {% if product.discounted_price < product.selling_price %}
-                    <small class="fw-light text-decoration-line-through">
-                        {{ product.selling_price }}
-                    </small>
+                    <span class="text-decoration-line-through text-muted">Tk. {{ product.selling_price }}</span>
                 {% endif %}
             </h4>
 
+            <!-- Size Selection -->
+            <div class="mt-3">
+                <label for="sizeSelect">Size:</label>
+                <select id="sizeSelect" class="form-select">
+                    {% for size in sizes %}
+                        <option value="{{ size }}">{{ size }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Color Selection -->
+            <div class="mt-3">
+                <label for="colorSelect">Color:</label>
+                <div class="d-flex">
+                    {% for color in colors %}
+                        <button class="btn btn-outline-secondary me-2">{{ color }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+
             <!-- Cart Buttons -->
             {% if item_already_in_cart %}
-                <a href="{% url 'showcart' %}" class="btn btn-warning shadow px-5 py-2 ms-2">Go to Cart</a>
+                <a href="{% url 'showcart' %}" class="btn btn-warning shadow px-5 py-2 mt-4">Go to Cart</a>
             {% else %}
                 <form action="{% url 'add_to_cart' %}" method="post" class="d-inline">
                     {% csrf_token %}
                     <input type="hidden" name="prod_id" value="{{ product.id }}">
-                    <button type="submit" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
+                    <button type="submit" class="btn btn-primary shadow px-5 py-2 mt-4">Add to Cart</button>
                 </form>
             {% endif %}
-
+            
             <!-- Buy Now -->
-            <a href="{% url 'buy-now'%}" class="btn btn-danger shadow px-5 py-2 ms-2">Buy Now</a>
+            <a href="{% url 'buy-now'%}" class="btn btn-danger shadow px-5 py-2 ms-2 mt-4">Buy Now</a>
 
-            <!-- Offers -->
+            <!-- Offers Section -->
             <h5 class="mt-5">Available Offers</h5>
             <ul>
                 <li>Bkash Offer: 5% Unlimited Cashback on Payment</li>

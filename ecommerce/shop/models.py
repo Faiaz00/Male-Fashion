@@ -30,9 +30,8 @@ class Customer(models.Model):
 
     def __str__(self):
         return str(self.id)
-    
 
-
+# Category choices
 CATEGORY_CHOICES = (
     ('tshirt', 'T-shirt'),
     ('pant', 'Pant'),
@@ -48,17 +47,62 @@ CATEGORY_CHOICES = (
     ('sneakers', 'Sneakers'),
 )
 
+# Brand choices
+BRAND_CHOICES = (
+    ('nike', 'Nike'),
+    ('adidas', 'Adidas'),
+    ('puma', 'Puma'),
+    ('zara', 'Zara'),
+    ('hm', 'H&M'),
+    ('gucci', 'Gucci'),
+    ('prada', 'Prada'),
+)
+
+
+class Color(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Size(models.Model):
+    name = models.CharField(max_length=10, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     title = models.CharField(max_length=100)
     selling_price = models.FloatField()
     discounted_price = models.FloatField()
     description = models.TextField()
-    brand = models.CharField(max_length=100)
-    category = models.CharField(choices=CATEGORY_CHOICES,max_length=10)
-    product_image = models.ImageField(upload_to='img/product')
+    brand = models.CharField(choices=BRAND_CHOICES, max_length=50)
+    category = models.CharField(choices=CATEGORY_CHOICES, max_length=20)
+    product_image = models.ImageField(upload_to='img/product', blank=True, null=True)
+
+    # Multi-select via ManyToMany
+    colors = models.ManyToManyField(Color, blank=True)
+    sizes = models.ManyToManyField(Size, blank=True)
+
+    additional_images = models.ManyToManyField(
+        'ProductImage', blank=True, related_name='products'
+    )
 
     def __str__(self):
-        return str(self.id)
+        return self.title
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name='product_images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='product_images/')
+    color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.color} image for {self.product.title}" if self.color else f"Image for {self.product.title}"
+
+
 
 
 class Cart(models.Model):

@@ -211,3 +211,46 @@
 .carousel-caption a:hover {
   background-color: #b20710;  /* Darker red on hover */
 }
+
+/*PRODUCT*/
+
+
+/* Prevent the image from being cropped (Main Image in Carousel) */
+.carousel-inner img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* Ensure the image is fully displayed without cropping */
+}
+
+/* Customize image thumbnails */
+.mini-thumbnail {
+    width: 60px;  /* Adjusted for better thumbnail size */
+    height: 60px;
+    object-fit: contain;  /* Ensure thumbnails show the full image without cropping */
+    cursor: pointer;
+}
+
+/* Enhance button styling */
+.btn-primary, .btn-danger {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Enhance product price visibility */
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #d9534f;
+}
+
+.text-muted {
+    font-size: 14px;
+}
+
+/* Product image hover effect */
+#product-image img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s;
+}

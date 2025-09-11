@@ -11,25 +11,36 @@ from django.http import JsonResponse, Http404
 from django.utils.decorators import method_decorator
 
 # Create your views here.
-class ProductView(View):
-     def get(self, request):
-       totalitem = 0
-       clothings_hot = Product.objects.filter(category='CH')
-       shoe_collection = Product.objects.filter(category = 'SC')
-       accessories = Product.objects.filter(category = 'A')
-       if request.user.is_authenticated:
-         totalitem = len(Cart.objects.filter(user=request.user))
-       return render(request, 'shop/home.html', {'clothings_hot':clothings_hot, 'shoe_collection':shoe_collection,'accessories':accessories,'totalitem':totalitem })
+
 
 class ProductDetailView(View):
- def get(self, request, pk):
-   totalitem = 0
-   product = Product.objects.get(pk=pk)
-   item_already_in_cart = False
-   if request.user.is_authenticated:
-     totalitem = len(Cart.objects.filter(user=request.user))
-     item_already_in_cart = Cart.objects.filter(Q(product=product.id) & Q(user=request.user)).exists()
-   return render(request, 'shop/productdetail.html', {'product':product,'item_already_in_cart': item_already_in_cart, 'totalitem':totalitem})
+    def get(self, request, pk):
+        totalitem = 0
+        product = get_object_or_404(Product, pk=pk)  # Use get_object_or_404 for better error handling
+
+        # Checking if the user is authenticated and getting cart details
+        item_already_in_cart = False
+        if request.user.is_authenticated:
+            totalitem = len(Cart.objects.filter(user=request.user))
+            item_already_in_cart = Cart.objects.filter(Q(product=product.id) & Q(user=request.user)).exists()
+
+        # Split the color and size fields into lists
+        colors = product.colors.split(',') if product.colors else []
+        sizes = product.sizes.split(',') if product.sizes else []
+
+        # Get the associated product images for the available colors
+        product_images = product.product_images.all()  # Fetch all associated images
+
+        context = {
+            'product': product,
+            'item_already_in_cart': item_already_in_cart,
+            'totalitem': totalitem,
+            'colors': colors,
+            'sizes': sizes,
+            'product_images': product_images,
+        }
+
+        return render(request, 'shop/productdetail.html', context)
 
 def add_to_cart(request):
     if not request.user.is_authenticated:
@@ -214,8 +225,12 @@ def shop(request):
 
 # View for clothing products
 def clothing(request):
-    clothing_products = Product.objects.filter(category='Clothing')  # Filter by Clothing category
-    return render(request, 'shop/clothings/clothing.html', {'clothing_products': clothing_products})
+    # Filter for clothing-related categories (e.g., t-shirt, pants, etc.)
+    clothing_categories = ['tshirt', 'pant', 'jacket', 'hoodie']
+    clothing_products = Product.objects.filter(category__in=clothing_categories)
+    return render(request, 'shop/clothings/clothing.html', {'clothings': clothing_products})
+
+
 
 # View for accessories products
 def accessories(request):
