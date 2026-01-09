@@ -16,31 +16,31 @@ from django.utils.decorators import method_decorator
 class ProductDetailView(View):
     def get(self, request, pk):
         totalitem = 0
-        product = get_object_or_404(Product, pk=pk)  # Use get_object_or_404 for better error handling
+        product = get_object_or_404(Product, pk=pk)
 
-        # Checking if the user is authenticated and getting cart details
+        # Check if the product is already in the user's cart
         item_already_in_cart = False
         if request.user.is_authenticated:
-            totalitem = len(Cart.objects.filter(user=request.user))
-            item_already_in_cart = Cart.objects.filter(Q(product=product.id) & Q(user=request.user)).exists()
+            totalitem = Cart.objects.filter(user=request.user).count()
+            item_already_in_cart = Cart.objects.filter(product=product.id, user=request.user).exists()
 
-        # Split the color and size fields into lists
-        colors = product.colors.split(',') if product.colors else []
-        sizes = product.sizes.split(',') if product.sizes else []
+        # ✅ Get ManyToMany values properly
+        colors = list(product.colors.values_list('name', flat=True))
+        sizes = list(product.sizes.values_list('name', flat=True))
 
-        # Get the associated product images for the available colors
-        product_images = product.product_images.all()  # Fetch all associated images
+        # ✅ Product images
+        product_images = product.product_images.all()
 
         context = {
             'product': product,
             'item_already_in_cart': item_already_in_cart,
             'totalitem': totalitem,
-            'colors': colors,
-            'sizes': sizes,
+            'colors': colors,   # ['Red', 'Blue', 'Green']
+            'sizes': sizes,     # ['S', 'M', 'L']
             'product_images': product_images,
         }
-
         return render(request, 'shop/productdetail.html', context)
+
 
 def add_to_cart(request):
     if not request.user.is_authenticated:

@@ -102,10 +102,12 @@
 }
 
 /* Adjusting image height */
-.carousel-item img { 
-    height: 70vh; /* 70% of viewport height */
-    object-fit: cover;
+.carousel-item img {
+    width: 100%;
+    max-height: 70vh;  /* adjust to desired height */
+    object-fit: cover;   /* crops image to fill container */
 }
+
 
 /* Modernizing and positioning the carousel control buttons */
 .carousel-control-prev, .carousel-control-next {
@@ -214,13 +216,6 @@
 
 /*PRODUCT*/
 
-
-/* Prevent the image from being cropped (Main Image in Carousel) */
-.carousel-inner img {
-    width: 100%;
-    height: auto;
-    object-fit: contain; /* Ensure the image is fully displayed without cropping */
-}
 
 /* Customize image thumbnails */
 .mini-thumbnail {
